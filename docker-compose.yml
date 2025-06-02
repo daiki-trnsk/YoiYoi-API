@@ -1,34 +1,41 @@
 version: '3.8'
 
 services:
+  db:
+    image: postgres:15
+    container_name: hackathon-db
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: appdb
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    networks:
+      - app-network
+
   backend:
     build:
       dockerfile: Dockerfile
+      context: .
     ports:
       - "8000:8000"
     environment:
       - PORT=8000
-      - MONGO_URI=mongodb://mongo:27017
+      - DB_HOST=db
+      - DB_PORT=5432
+      - DB_USER=user
+      - DB_PASSWORD=password
+      - DB_NAME=appdb
       - SECRET_KEY=your_secret_key
     depends_on:
-      - mongo
+      - db
     networks:
       - app-network
 
-    db:
-    image: postgres:15
-    container_name: yourapp-db
-    environment:
-      POSTGRES_USER: user
-      POSTGRES_PASSWORD: password
-      POSTGRES_DB: yourapp
-    ports:
-      - "5432:5432"
-    volumes:
-      - db_data:/var/lib/postgresql/data
+volumes:
+  pgdata:
 
 networks:
   app-network:
-
-volumes:
-  db_data:
