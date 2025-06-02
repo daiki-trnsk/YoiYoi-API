@@ -1,6 +1,8 @@
 module github.com/daiki-trnsk/YoiYoi-API
 
-go 1.20
+go 1.23.0
+
+toolchain go1.23.1
 
 require github.com/jackc/pgx/v5 v5.7.5
 
