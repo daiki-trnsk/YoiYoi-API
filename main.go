@@ -14,17 +14,17 @@ import (
 func main() {
 	_ = godotenv.Load()
 
-	conn, err := database.ConnectDB()
-	if err != nil {
-		log.Fatalf("failed to connect to DB: %v", err)
-	}
-	defer conn.Close(nil)
-	log.Println("Connected to the database successfully")
+	database.Init()
 
 	e := echo.New()
 
 	// 仮でルートだけ
 	e.GET("/", handler.Hello)
+
+	e.GET("/todos", handler.GetTodos)
+	e.POST("/todos", handler.CreateTodo)
+	e.PUT("/todos/:id", handler.UpdateTodo)
+	e.DELETE("/todos/:id", handler.DeleteTodo)
 
 	port := os.Getenv("PORT")
 	if port == "" {
