@@ -42,7 +42,7 @@ func main() {
 	auth.PATCH("/auth/me", handlers.UpdateMe)
 	auth.POST("/auth/logout", handlers.Logout)
 
-	auth.GET("users/:id", handlers.GetUserByID)
+	auth.GET("users/:id", handlers.GetUseByID)
 
 	auth.GET("/logs/me", handlers.GetLogs)
 	auth.GET("/logs/:id", handlers.GetLogByID)

@@ -10,7 +10,7 @@ type Database struct {
 	Conn *gorm.DB
 }
 
-func GetUserByID(id string) (*models.Users, error) {
+func GetUseByID(id string) (*models.Users, error) {
     var user models.Users
     if err := database.DB.First(&user, "id = ?", id).Error; err != nil {
         return nil, err

@@ -6,11 +6,16 @@ import (
 	"github.com/labstack/echo/v4"
 	"github.com/daiki-trnsk/YoiYoi-API/pkg/dto"
 	"github.com/daiki-trnsk/YoiYoi-API/internal/repositories"
+	"github.com/google/uuid"
 )
 
-func GetUserByID(c echo.Context) error {
+func GetUseByID(c echo.Context) error {
 	id := c.Param("id")
-	user, err := repositories.GetUserByID(id)
+	uuidID, err := uuid.Parse(id)
+	if err != nil {
+		return c.JSON(http.StatusBadRequest, map[string]string{"error": "Invalid user ID"})
+	}
+	user, err := repositories.GetUserByID(uuidID)
 	if err != nil {
 		return c.JSON(http.StatusNotFound, map[string]string{"error": "User not found"})
 	}
