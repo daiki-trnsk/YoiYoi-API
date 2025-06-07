@@ -56,6 +56,11 @@ func main() {
 	auth.PATCH("/friends/accept/:id", handlers.AcceptFriendRequest)
 	auth.DELETE("/friends/:id", handlers.DeleteFriendShip)
 
+	auth.GET("/home", handlers.GetHome)
+	auth.GET("/timeline", handlers.GetTimeline)
+	auth.GET("/stats/week", handlers.GetWeeklyStats)
+	auth.GET("/stats/month", handlers.GetMonthlyStats)
+
 	port := os.Getenv("PORT")
 	if port == "" {
 		port = "8080"
