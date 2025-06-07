@@ -34,11 +34,10 @@ type AuthResponse struct {
 type UpdatedAtRequest struct {
 	Username string `json:"username"`
 	Email    string `json:"email"`
-	// IconURL         string `json:"icon_url"`
-	// Introduction    string `json:"introduction"`
-	// FavoriteAlcohol string `json:"favorite_alcohol"`
-	// DrinkingHistory string `json:"drinking_history"`
-	// HowDrinking     string `json:"how_drinking"`
+	AvatarImg      string    `json:"avatar_img"`
+	Bio            string    `json:"bio"`
+	FavoriteDrinks string    `json:"favorite_drinks"`
+	Motto          string    `json:"motto"`
 }
 
 // サインアップ
@@ -154,11 +153,10 @@ func UpdateMe(c echo.Context) error {
 
 	user.Username = req.Username
 	user.Email = req.Email
-	// user.IconURL = req.IconURL
-	// user.Introduction = req.Introduction
-	// user.FavoriteAlcohol = req.FavoriteAlcohol
-	// user.DrinkingHistory = req.DrinkingHistory
-	// user.HowDrinking = req.HowDrinking
+	user.AvatarImg = req.AvatarImg
+	user.Bio = req.Bio
+	user.FavoriteDrinks = req.FavoriteDrinks
+	user.Motto = req.Motto
 	user.UpdatedAt = time.Now()
 
 	if err := database.DB.Save(&user).Error; err != nil {

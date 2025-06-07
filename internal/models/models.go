@@ -8,18 +8,17 @@ import (
 
 // ユーザー情報
 type Users struct {
-	ID           uuid.UUID `gorm:"type:uuid;default:uuid_generate_v4();primaryKey" json:"id"`
-	Username     string    `gorm:"unique;not null" json:"username"`
-	PasswordHash string    `gorm:"not null;column:password_hash" json:"password_hash"`
-	Email        string    `gorm:"unique;not null" json:"email"`
-	CreatedAt    time.Time `gorm:"autoCreateTime" json:"created_at"`
-	UpdatedAt    time.Time `gorm:"autoUpdateTime" json:"updated_at"`
-	RefreshToken string    `gorm:"unique;not null" json:"refresh_token"`
-	// IconURL         string    `json:"icon_url"`
-	// Introduction    string    `json:"introduction"`
-	// FavoriteAlcohol string    `json:"favorite_alcohol"`
-	// DrinkingHistory string    `json:"drinking_history"`
-	// HowDrinking     string    `json:"how_drinking"`
+	ID             uuid.UUID `gorm:"type:uuid;default:uuid_generate_v4();primaryKey" json:"id"`
+	Username       string    `gorm:"unique;not null" json:"username"`
+	PasswordHash   string    `gorm:"not null;column:password_hash" json:"password_hash"`
+	Email          string    `gorm:"unique;not null" json:"email"`
+	CreatedAt      time.Time `gorm:"autoCreateTime" json:"created_at"`
+	UpdatedAt      time.Time `gorm:"autoUpdateTime" json:"updated_at"`
+	RefreshToken   string    `gorm:"unique;not null" json:"refresh_token"`
+	AvatarImg      string    `json:"avatar_img"`
+	Bio            string    `json:"bio"`
+	FavoriteDrinks string    `json:"favorite_drinks"`
+	Motto          string    `json:"motto"`
 }
 
 // 飲酒記録
@@ -28,7 +27,7 @@ type DrinksLogs struct {
 	UserID uuid.UUID `gorm:"type:uuid;not null" json:"user_id"`
 	// Mood      string         `gorm:"not null" json:"mood"`
 	// Tags      pq.StringArray `gorm:"type:text[]" json:"tags"`
-	Comment  string `gorm:"type:text" json:"comment"`
+	Comment string `gorm:"type:text" json:"comment"`
 	// ImageURL string `gorm:"type:text" json:"image_url"`
 	// IsShared  bool           `gorm:"default:false" json:"is_shared"`
 	DrinkDate time.Time `gorm:"not null" json:"drink_date"`
