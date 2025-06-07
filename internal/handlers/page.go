@@ -223,17 +223,17 @@ func getPeriodStats(c echo.Context, days int) error {
 	// 実際に飲酒記録があった日数
 	actualDays := len(dateSet)
 	// 平均（記録があった日数で割る場合はactualDays、常に期間日数で割る場合はperiodDays）
-	averageAlcoholGram := 0
+	var averageAlcoholGram float64
 	if periodDays > 0 {
-		averageAlcoholGram = totalAlcoholGram / periodDays
+		averageAlcoholGram = float64(totalAlcoholGram) / float64(periodDays)
 	}
 
 	resp := dto.PeriodStatsResponse{
-        TotalAlcoholGram:   totalAlcoholGram,
-        AverageAlcoholGram: averageAlcoholGram,
-        PeriodDays:         periodDays,
-        ActualDrinkDays:    actualDays,
-        AlcoholByWeekday:   weekdayAlcohol,
-    }
-    return c.JSON(http.StatusOK, resp)
+		TotalAlcoholGram:   totalAlcoholGram,
+		AverageAlcoholGram: averageAlcoholGram,
+		PeriodDays:         periodDays,
+		ActualDrinkDays:    actualDays,
+		AlcoholByWeekday:   weekdayAlcohol,
+	}
+	return c.JSON(http.StatusOK, resp)
 }

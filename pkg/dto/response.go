@@ -26,9 +26,9 @@ type DrinkLogWithDetails struct {
 
 func ToUserResponse(u models.Users) UserResponse {
 	return UserResponse{
-		ID:       u.ID,
-		Username: u.Username,
-		Email:    u.Email,
+		ID:             u.ID,
+		Username:       u.Username,
+		Email:          u.Email,
 		AvatarImg:      u.AvatarImg,
 		Bio:            u.Bio,
 		FavoriteDrinks: u.FavoriteDrinks,
@@ -62,7 +62,7 @@ type TimelineResponse struct {
 
 type PeriodStatsResponse struct {
 	TotalAlcoholGram   int            `json:"total_alcohol_gram"`
-	AverageAlcoholGram int            `json:"average_alcohol_gram"`
+	AverageAlcoholGram float64        `json:"average_alcohol_gram"`
 	PeriodDays         int            `json:"period_days"`
 	ActualDrinkDays    int            `json:"actual_drink_days"`
 	AlcoholByWeekday   map[string]int `json:"alcohol_by_weekday"`
