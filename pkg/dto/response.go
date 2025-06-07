@@ -39,8 +39,7 @@ func ToUserResponse(u models.Users) UserResponse {
 }
 
 type WeeklyStats struct {
-	TotalAlcoholMl int `json:"total_alcohol_ml"`
-	// TotalNumberOfDrinks int            `json:"total_number_of_drinks"`
+	TotalAlcoholGram int            `json:"total_alcohol_gram"`
 	AlcoholByWeekday map[string]int `json:"alcohol_by_weekday"`
 }
 
