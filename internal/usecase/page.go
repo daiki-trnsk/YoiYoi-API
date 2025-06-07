@@ -1,9 +1,11 @@
 package usecase
 
 import (
+	"fmt"
 	"sort"
 	"time"
 
+	"github.com/daiki-trnsk/YoiYoi-API/internal/models"
 	"github.com/daiki-trnsk/YoiYoi-API/internal/repositories"
 	"github.com/daiki-trnsk/YoiYoi-API/pkg/dto"
 	"github.com/google/uuid"
@@ -76,13 +78,15 @@ func GetTimelineInfo(userID uuid.UUID) (*dto.TimelineResponse, error) {
 	if err != nil {
 		return nil, err
 	}
-	friendIDs := make(map[uuid.UUID]struct{})
+	friendIDs := make(map[uuid.UUID]string) // statusも保持
 	for _, f := range friends {
+		var friendID uuid.UUID
 		if f.FollowerID == userID {
-			friendIDs[f.FolloweeID] = struct{}{}
+			friendID = f.FolloweeID
 		} else {
-			friendIDs[f.FollowerID] = struct{}{}
+			friendID = f.FollowerID
 		}
+		friendIDs[friendID] = f.Status // statusを記録
 	}
 	ids := make([]uuid.UUID, 0, len(friendIDs))
 	for id := range friendIDs {
@@ -93,10 +97,40 @@ func GetTimelineInfo(userID uuid.UUID) (*dto.TimelineResponse, error) {
 		return nil, err
 	}
 
+	// friendList: pending→acceptedの順で並べる
+	var pendingList, acceptedList []dto.FriendWithStatus
+	for _, f := range friends {
+		var friendID uuid.UUID
+		if f.FollowerID == userID {
+			friendID = f.FolloweeID
+		} else {
+			friendID = f.FollowerID
+		}
+		// ユーザー情報取得
+		u, err := findUserByID(users, friendID)
+		if err != nil {
+			continue // ユーザー情報がなければスキップ
+		}
+		friend := dto.FriendWithStatus{
+			UserResponse: dto.ToUserResponse(*u),
+			Status:       f.Status,
+			FriendID:     f.ID,
+		}
+		if f.Status == "pending" {
+			pendingList = append(pendingList, friend)
+		} else {
+			acceptedList = append(acceptedList, friend)
+		}
+	}
+	friendList := append(pendingList, acceptedList...)
+
+	// timeline: acceptedのみ
 	var timeline []dto.Timeline
-	friendList := make([]dto.UserResponse, 0, len(users))
 	for _, u := range users {
-		friendList = append(friendList, dto.ToUserResponse(u))
+		status := friendIDs[u.ID]
+		if status != "accepted" {
+			continue
+		}
 		logs, err := repositories.GetDrinkLogs(u.ID, nil, 10)
 		if err != nil {
 			return nil, err
@@ -160,4 +194,14 @@ func GetPeriodStatsInfo(userID uuid.UUID, days int) (*dto.PeriodStatsResponse, e
 		AlcoholByWeekday:   weekdayAlcohol,
 	}
 	return resp, nil
+}
+
+// ユーティリティ関数
+func findUserByID(users []models.Users, id uuid.UUID) (*models.Users, error) {
+	for _, u := range users {
+		if u.ID == id {
+			return &u, nil
+		}
+	}
+	return nil, fmt.Errorf("user not found")
 }

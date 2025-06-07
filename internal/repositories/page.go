@@ -19,7 +19,8 @@ func GetUserByID(userID uuid.UUID) (*models.Users, error) {
 func GetFriends(userID uuid.UUID) ([]models.Friends, error) {
 	var friends []models.Friends
 	err := database.DB.
-		Where("(follower_id = ? OR followee_id = ?) AND status = ?", userID, userID, "accepted").
+		Where("follower_id = ? OR followee_id = ?", userID, userID).
+		Order("CASE WHEN status = 'pending' THEN 0 ELSE 1 END, created_at DESC").
 		Find(&friends).Error
 	return friends, err
 }

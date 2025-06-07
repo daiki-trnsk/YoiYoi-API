@@ -39,15 +39,15 @@ func ToUserResponse(u models.Users) UserResponse {
 }
 
 type WeeklyStats struct {
-	TotalAlcoholMl      int            `json:"total_alcohol_ml"`
+	TotalAlcoholMl int `json:"total_alcohol_ml"`
 	// TotalNumberOfDrinks int            `json:"total_number_of_drinks"`
-	AlcoholByWeekday    map[string]int `json:"alcohol_by_weekday"`
+	AlcoholByWeekday map[string]int `json:"alcohol_by_weekday"`
 }
 
 type HomeResponse struct {
 	UserInfo    UserResponse          `json:"user_info"`
 	WeeklyStats WeeklyStats           `json:"weekly_stats"`
-	LogsCount30  int                    `json:"logs_count_30"`
+	LogsCount30 int                   `json:"logs_count_30"`
 	RecentLogs  []DrinkLogWithDetails `json:"recent_logs"`
 }
 
@@ -56,9 +56,15 @@ type Timeline struct {
 	DrinkLog DrinkLogWithDetails `json:"drink_log"`
 }
 
+type FriendWithStatus struct {
+	UserResponse
+	FriendID uuid.UUID `json:"friend_id"`
+	Status   string    `json:"status"`
+}
+
 type TimelineResponse struct {
-	FriendList []UserResponse `json:"friend_list"`
-	Timeline   []Timeline     `json:"timeline"`
+	FriendList []FriendWithStatus `json:"friend_list"`
+	Timeline   []Timeline         `json:"timeline"`
 }
 
 type PeriodStatsResponse struct {
