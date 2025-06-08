@@ -2,6 +2,7 @@ package handlers
 
 import (
 	// "fmt"
+	"log"
 	"net/http"
 	"time"
 
@@ -71,6 +72,7 @@ func CreateLog(c echo.Context) error {
 
 	var req dto.LogRequest
 	if err := c.Bind(&req); err != nil {
+		log.Println("Error binding request:", err)
 		return c.JSON(http.StatusBadRequest, echo.Map{"error": "invalid request body"})
 	}
 
