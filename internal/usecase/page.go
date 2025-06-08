@@ -32,7 +32,7 @@ func GetHomeInfo(userID uuid.UUID) (*dto.HomeResponse, error) {
 	logsCount30 := len(logs30)
 
 	weeklyStats := dto.WeeklyStats{
-		TotalAlcoholGram: 0,
+		TotalAlcoholMl:   0,
 		AlcoholByWeekday: map[string]int{"Mon": 0, "Tue": 0, "Wed": 0, "Thu": 0, "Fri": 0, "Sat": 0, "Sun": 0},
 	}
 	for _, log := range logs {
@@ -42,10 +42,9 @@ func GetHomeInfo(userID uuid.UUID) (*dto.HomeResponse, error) {
 		}
 		weekday := log.DrinkDate.Weekday().String()[:3]
 		for _, drink := range drinks {
-			alcoholMl := float64(drink.AmountMl) * drink.Abv / 100.0
-			alcoholGram := int(alcoholMl * 0.8)
-			weeklyStats.TotalAlcoholGram += alcoholGram
-			weeklyStats.AlcoholByWeekday[weekday] += alcoholGram
+			alcoholMl := int(float64(drink.AmountMl) * drink.Abv / 100.0)
+			weeklyStats.TotalAlcoholMl += alcoholMl
+			weeklyStats.AlcoholByWeekday[weekday] += alcoholMl
 		}
 	}
 
