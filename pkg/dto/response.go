@@ -72,4 +72,5 @@ type PeriodStatsResponse struct {
 	PeriodDays         int            `json:"period_days"`
 	ActualDrinkDays    int            `json:"actual_drink_days"`
 	AlcoholByWeekday   map[string]int `json:"alcohol_by_weekday"`
+	AlcoholByDrinkType map[string]int `json:"alcohol_by_drink_type"`
 }
